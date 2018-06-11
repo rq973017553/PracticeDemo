@@ -1,0 +1,7 @@
+<resources>
+
+    <style name="AppTheme" parent="AppTheme.Base">
+        <!--这里和在代码中的设置(addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS))功能一样-->
+        <item name="android:windowTranslucentStatus">true</item>
+    </style>
+</resources>

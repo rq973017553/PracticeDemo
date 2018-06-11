@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:background="@color/colorAccent"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <com.rq.practice.view.CustomHorizontalScrollView
+        android:id="@+id/custom_horizontal_scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TextView
+            android:layout_margin="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="000"
+            android:textSize="21sp"
+            android:background="#ff00ddff"
+            />
+        <TextView
+            android:layout_margin="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="001"
+            android:textSize="21sp"
+            android:background="#ffff8800"
+            />
+        <TextView
+            android:layout_margin="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="002"
+            android:textSize="21sp"
+            android:background="#ffaa66cc"
+            />
+    </com.rq.practice.view.CustomHorizontalScrollView>
+</LinearLayout>

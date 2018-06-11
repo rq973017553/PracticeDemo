@@ -1,0 +1,13 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme.Base" parent="Theme.AppCompat.Light.NoActionBar">
+         <!--Customize your theme here. -->
+    </style>
+
+    <style name="my_menu" parent="Widget.AppCompat.Light.PopupMenu.Overflow">
+        <item name="overlapAnchor">false</item>
+        <item name="android:dropDownHorizontalOffset">1dp</item>
+        <item name="android:dropDownVerticalOffset">1dp</item>
+    </style>
+</resources>
