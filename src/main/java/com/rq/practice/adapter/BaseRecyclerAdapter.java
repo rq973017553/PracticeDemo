@@ -25,8 +25,6 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<BaseRe
 
     private LayoutInflater mLayoutInflater;
 
-    private BaseViewHolder mViewHolder;
-
     //数据源
     protected List<T> mListData;
 
@@ -65,46 +63,6 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<BaseRe
     }
 
     /**
-     * setOnClickListener
-     * @param id
-     * @param clickListener
-     */
-    public void setOnClickListener(int id, View.OnClickListener clickListener){
-        View view = mViewHolder.getItemView(id);
-        view.setOnClickListener(clickListener);
-    }
-
-    /**
-     * setOnLongClickListener
-     * @param id
-     * @param longClickListener
-     */
-    public void setOnLongClickListener(int id, View.OnLongClickListener longClickListener){
-        View view = mViewHolder.getItemView(id);
-        view.setOnLongClickListener(longClickListener);
-    }
-
-    /**
-     * setOnTouchListener
-     * @param id
-     * @param touchListener
-     */
-    public void setOnTouchListener(int id, View.OnTouchListener touchListener){
-        View view = mViewHolder.getItemView(id);
-        view.setOnTouchListener(touchListener);
-    }
-
-    /**
-     * setItemClickListener
-     * @param id
-     * @param itemClickListener
-     */
-    public void setItemClickListener(int id, AdapterView.OnItemClickListener itemClickListener){
-        AdapterView view = mViewHolder.getItemView(id);
-        view.setOnItemClickListener(itemClickListener);
-    }
-
-    /**
      * 复写来自RecyclerView.Adapter的
      * onCreateViewHolder抽象方法
      * @param parent
@@ -114,8 +72,8 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<BaseRe
     @Override
     public BaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = mLayoutInflater.inflate(getLayoutID(), parent, false);
-        mViewHolder = new BaseViewHolder(view);
-        return mViewHolder;
+        BaseViewHolder viewHolder = new BaseViewHolder(view);
+        return viewHolder;
     }
 
     /**

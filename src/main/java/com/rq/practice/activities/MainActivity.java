@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ExpandableListView;
+import android.widget.TextView;
 
 import com.rq.practice.R;
 import com.rq.practice.activities.base.BaseActivity;
@@ -67,8 +68,9 @@ public class MainActivity extends BaseActivity {
     MainAdapter.OnItemClickListener itemClickListener = new MainAdapter.OnItemClickListener(){
         @Override
         public void onItemClick(View itemView, final int position) {
-            EasyLog.v("onItemClick!");
-            mMainAdapter.setOnClickListener(R.id.main_item_btn, new View.OnClickListener() {
+            EasyLog.v("onItemClick!::"+position);
+            TextView textView = itemView.findViewById(R.id.main_item_btn);
+            textView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     PracticeBean practiceBean = mMainAdapter.getItemData(position);
@@ -76,6 +78,14 @@ public class MainActivity extends BaseActivity {
                     startActivity(clazz);
                 }
             });
+//            mMainAdapter.setOnClickListener(R.id.main_item_btn, new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    PracticeBean practiceBean = mMainAdapter.getItemData(position);
+//                    Class clazz = practiceBean.getClazz();
+//                    startActivity(clazz);
+//                }
+//            });
         }
     };
 

@@ -3,6 +3,7 @@ package com.rq.practice.adapter;
 import android.content.Context;
 import android.text.TextUtils;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.rq.practice.R;
 import com.rq.practice.bean.PracticeBean;
@@ -33,8 +34,8 @@ public class MainAdapter extends BaseRecyclerAdapter<PracticeBean>{
 
     @Override
     protected void bindHolder(BaseViewHolder holder, int position) {
-        Button button = holder.getItemView(R.id.main_item_btn);
-        button.setFocusable(false);
+        TextView button = holder.getItemView(R.id.main_item_btn);
+//        button.setFocusable(false);
         PracticeBean practiceBean = mListData.get(position);
         String text = practiceBean.getText();
         if (!TextUtils.isEmpty(text)){

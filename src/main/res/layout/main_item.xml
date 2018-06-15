@@ -4,10 +4,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <Button
+    <TextView
         android:id="@+id/main_item_btn"
-        android:layout_gravity="left|center_vertical"
         android:textAllCaps="false"
-        android:layout_width="100dp"
+        android:layout_gravity="center"
+        android:layout_width="match_parent"
         android:layout_height="60dp" />
 </LinearLayout>
