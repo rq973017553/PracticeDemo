@@ -1,5 +1,7 @@
 package com.rq.practice.fragments.base;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -67,6 +69,10 @@ public abstract class BaseFragment extends Fragment {
             throw new IllegalArgumentException("id not found!");
         }
         return (T) t.findViewById(id);
+    }
+
+    protected void startActivity(Class<? extends Activity> clazz){
+        startActivity(new Intent(getActivity(), clazz));
     }
 
 }

@@ -5,6 +5,14 @@
          <!--Customize your theme here. -->
     </style>
 
+    <style name="AppThem" parent="AppTheme.Base">
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+    
+    <style name="app_common_bg">
+        <item name="android:background">@android:color/white</item>
+    </style>
+    
     <style name="my_menu" parent="Widget.AppCompat.Light.PopupMenu.Overflow">
         <item name="overlapAnchor">false</item>
         <item name="android:dropDownHorizontalOffset">1dp</item>

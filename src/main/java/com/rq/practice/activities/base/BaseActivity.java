@@ -1,10 +1,13 @@
 package com.rq.practice.activities.base;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.FrameLayout;
@@ -50,8 +53,13 @@ public abstract class BaseActivity extends AppCompatActivity {
 
         // 添加类
         mAddLayout = findViewById(R.id.add_layout);
-        mAddLayout.addView(mLayoutInflater.inflate(getLayoutID(), null, true),
-                new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+        int layoutID = getLayoutID();
+        View view = mLayoutInflater.inflate(layoutID, null);
+        if (view == null){
+            throw new RuntimeException("inflter "+layoutID+"failure!");
+        }
+        mAddLayout.addView(view, new ViewGroup.LayoutParams(
+                                            ViewGroup.LayoutParams.MATCH_PARENT,
                                             ViewGroup.LayoutParams.MATCH_PARENT));
     }
 
@@ -95,9 +103,13 @@ public abstract class BaseActivity extends AppCompatActivity {
         ActivityUtils.onActivityDestroy(this);
     }
 
+    protected void startActivity(Class<? extends Activity> clazz){
+        startActivity(new Intent(this, clazz));
+    }
+
     public abstract int getLayoutID();
 
-    public abstract void initData();
-
     public abstract void initView();
+
+    public abstract void initData();
 }

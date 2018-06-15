@@ -3,7 +3,7 @@ package com.rq.practice.utils;
 import android.util.Log;
 
 /**
- * Created by antiy2015 on 2017/4/5.
+ * Created by rock you on 2017/4/5.
  */
 public class EasyLog {
     private static final String DEFAULT_TAG = "EasyLog";

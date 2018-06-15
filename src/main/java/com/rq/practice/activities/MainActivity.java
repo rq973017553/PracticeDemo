@@ -1,15 +1,20 @@
 package com.rq.practice.activities;
 
-import android.os.Build;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.ViewTreeObserver;
-import android.widget.Toast;
+import android.app.Activity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.ExpandableListView;
 
 import com.rq.practice.R;
 import com.rq.practice.activities.base.BaseActivity;
+import com.rq.practice.activities.practice.CustomScrollActivity;
+import com.rq.practice.activities.practice.FragmentTabHostPractice;
+import com.rq.practice.adapter.MainAdapter;
+import com.rq.practice.bean.PracticeBean;
 import com.rq.practice.utils.EasyLog;
-import com.rq.practice.view.CustomHorizontalScrollView;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -17,10 +22,14 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends BaseActivity {
 
-    private CustomHorizontalScrollView mCustomView;
+    private RecyclerView mRecyclerView;
+
+    private MainAdapter mMainAdapter;
 
     @Override
     public int getLayoutID() {
@@ -28,45 +37,47 @@ public class MainActivity extends BaseActivity {
     }
 
     @Override
-    public void initData() {
+    public void initView() {
+        mMainAdapter = new MainAdapter(MainActivity.this);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(MainActivity.this);
+        layoutManager.setOrientation(RecyclerView.VERTICAL);
+        mRecyclerView = findViewById(R.id.show_practice_list);
+        mRecyclerView.setLayoutManager(layoutManager);
+        mRecyclerView.setAdapter(mMainAdapter);
+        mMainAdapter.setItemClickListener(itemClickListener);
     }
 
     @Override
-    public void initView() {
-        mCustomView = findViewById(R.id.custom_horizontal_scrollView);
+    public void initData() {
+        List<PracticeBean> listData = new ArrayList<>();
+        listData.add(createPracticeBean(FragmentTabHostPractice.class));
+        listData.add(createPracticeBean(CustomScrollActivity.class));
+        mMainAdapter.setListData(listData);
     }
 
-    // 获取View的宽高
-    public void testViewSize(){
-        // 1.获取View的宽高的一种方法。使用该方案的时候，建议放在onAttachedToWindow方法中
-        mCustomView.post(new Runnable() {
-            @Override
-            public void run() {
-                EasyLog.v("Width::"+ mCustomView.getWidth());
-                EasyLog.v("Height::"+ mCustomView.getHeight());
-            }
-        });
+    private PracticeBean createPracticeBean(Class<? extends Activity> clazz){
+        PracticeBean practiceBean = new PracticeBean();
+        practiceBean.setClazz(clazz);
+        String className = clazz.getName();
+        className = className.substring(className.lastIndexOf('.')+1);
+        practiceBean.setText("跳转到"+className);
+        return practiceBean;
+    }
 
-        // 2.获取View的宽高的一种方法
-        final ViewTreeObserver observer = mCustomView.getViewTreeObserver();
-        observer.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                EasyLog.v("Width::"+ mCustomView.getWidth());
-                EasyLog.v("Height::"+ mCustomView.getHeight());
-                // 注意isAlive一定要判断
-                if (observer.isAlive()){
-                    if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN){
-                        // 安卓版本在16以上使用
-                        observer.removeOnGlobalLayoutListener(this);
-                    }else {
-                        // 安卓版本在16以下使用
-                        observer.removeGlobalOnLayoutListener(this);
-                    }
+    MainAdapter.OnItemClickListener itemClickListener = new MainAdapter.OnItemClickListener(){
+        @Override
+        public void onItemClick(View itemView, final int position) {
+            EasyLog.v("onItemClick!");
+            mMainAdapter.setOnClickListener(R.id.main_item_btn, new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    PracticeBean practiceBean = mMainAdapter.getItemData(position);
+                    Class clazz = practiceBean.getClazz();
+                    startActivity(clazz);
                 }
-            }
-        });
-    }
+            });
+        }
+    };
 
     /**
      * 演示getDir操作
@@ -112,38 +123,4 @@ public class MainActivity extends BaseActivity {
         }
         EasyLog.v(path);
     }
-
-//    private void initToolBar(){
-//        setTitle("");
-//        mToolBar = findViewById(R.id.toolbar);
-//        mToolBar.setTitle("");
-//        setSupportActionBar(mToolBar);
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT){
-//            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-//        }
-//    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            Toast.makeText(MainActivity.this, "Setting", Toast.LENGTH_SHORT).show();
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-
 }

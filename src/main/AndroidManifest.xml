@@ -7,7 +7,7 @@
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme.Base">
+        android:theme="@style/AppTheme">
         <activity
             android:configChanges="locale|layoutDirection"
             android:name=".activities.MainActivity"
@@ -18,6 +18,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!--FragmentTabHost组件练习-->
+        <activity android:name=".activities.practice.FragmentTabHostPractice"/>
+
+        <!--自定义View练习-->
+        <activity android:name=".activities.practice.CustomScrollActivity"/>
     </application>
 
 </manifest>

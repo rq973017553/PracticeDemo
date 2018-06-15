@@ -2,9 +2,11 @@ package com.rq.practice.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -23,9 +25,12 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<BaseRe
 
     private LayoutInflater mLayoutInflater;
 
+    private BaseViewHolder mViewHolder;
+
     //数据源
     protected List<T> mListData;
 
+    // ItemClickListener
     private BaseRecyclerAdapter.OnItemClickListener mItemClickListener;
 
     /**
@@ -60,6 +65,46 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<BaseRe
     }
 
     /**
+     * setOnClickListener
+     * @param id
+     * @param clickListener
+     */
+    public void setOnClickListener(int id, View.OnClickListener clickListener){
+        View view = mViewHolder.getItemView(id);
+        view.setOnClickListener(clickListener);
+    }
+
+    /**
+     * setOnLongClickListener
+     * @param id
+     * @param longClickListener
+     */
+    public void setOnLongClickListener(int id, View.OnLongClickListener longClickListener){
+        View view = mViewHolder.getItemView(id);
+        view.setOnLongClickListener(longClickListener);
+    }
+
+    /**
+     * setOnTouchListener
+     * @param id
+     * @param touchListener
+     */
+    public void setOnTouchListener(int id, View.OnTouchListener touchListener){
+        View view = mViewHolder.getItemView(id);
+        view.setOnTouchListener(touchListener);
+    }
+
+    /**
+     * setItemClickListener
+     * @param id
+     * @param itemClickListener
+     */
+    public void setItemClickListener(int id, AdapterView.OnItemClickListener itemClickListener){
+        AdapterView view = mViewHolder.getItemView(id);
+        view.setOnItemClickListener(itemClickListener);
+    }
+
+    /**
      * 复写来自RecyclerView.Adapter的
      * onCreateViewHolder抽象方法
      * @param parent
@@ -69,8 +114,8 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<BaseRe
     @Override
     public BaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = mLayoutInflater.inflate(getLayoutID(), parent, false);
-        BaseViewHolder viewHolder = new BaseViewHolder(view);
-        return viewHolder;
+        mViewHolder = new BaseViewHolder(view);
+        return mViewHolder;
     }
 
     /**
@@ -81,8 +126,8 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<BaseRe
      */
     @Override
     public void onBindViewHolder(BaseViewHolder holder, int position) {
-        holder.setItemClickListener(mItemClickListener, position);
         bindHolder(holder, position);
+        holder.setItemClickListener(mItemClickListener, position);
     }
 
     /**
@@ -96,6 +141,19 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<BaseRe
             return 0;
         }
         return mListData.size();
+    }
+
+    /**
+     * BaseRecyclerAdapter自带的方法
+     * 用于提供每个Item的数据
+     * @param position
+     * @return
+     */
+    public T getItemData(int position){
+        if (mListData == null){
+            return null;
+        }
+        return mListData.get(position);
     }
 
     /**
@@ -124,11 +182,22 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<BaseRe
      */
     static class BaseViewHolder extends RecyclerView.ViewHolder {
 
-        public BaseViewHolder(View itemView) {
+        // SparseArray用于存储View，作为一种缓存
+        private SparseArray<View> mViews;
+
+        BaseViewHolder(View itemView) {
             super(itemView);
+            if (mViews == null){
+                mViews = new SparseArray<>();
+            }
         }
 
-        public void setItemClickListener(final BaseRecyclerAdapter.OnItemClickListener listener, final int position){
+        /**
+         * RecyclerView的Item的事件监听
+         * @param listener
+         * @param position
+         */
+        void setItemClickListener(final BaseRecyclerAdapter.OnItemClickListener listener, final int position){
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -147,12 +216,14 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<BaseRe
          * @param <T>
          * @return
          */
+        @SuppressWarnings("unchecked")
         public <T extends View> T getItemView(int id){
-            T v = (T)itemView.findViewById(id);
-            if (v == null){
-                throw new IllegalArgumentException("itemView's id no exist or error!");
+            View view = mViews.get(id);
+            if (view == null){
+                view = itemView.findViewById(id);
+                mViews.put(id, view);
             }
-            return v;
+            return (T)view;
         }
 
         public ImageView getImageView(int id){
