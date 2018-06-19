@@ -34,8 +34,9 @@ public class MainAdapter extends BaseRecyclerAdapter<PracticeBean>{
 
     @Override
     protected void bindHolder(BaseViewHolder holder, int position) {
-        TextView button = holder.getItemView(R.id.main_item_btn);
-//        button.setFocusable(false);
+        Button button = holder.getItemView(R.id.main_item_btn);
+        // 添加子View的点击事件
+        holder.addOnClickListener(button, position);
         PracticeBean practiceBean = mListData.get(position);
         String text = practiceBean.getText();
         if (!TextUtils.isEmpty(text)){

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -30,6 +31,15 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<BaseRe
 
     // ItemClickListener
     private BaseRecyclerAdapter.OnItemClickListener mItemClickListener;
+
+    // ItemChildClickListener
+    private BaseRecyclerAdapter.OnItemChildClickListener mItemChildClickListener;
+
+    // ItemChildLongClickListener
+    private BaseRecyclerAdapter.OnItemChildLongClickListener mItemChildLongClickListener;
+
+    // ItemChildTouchClickListener
+    private BaseRecyclerAdapter.OnItemChildTouchClickListener mItemChildTouchClickListener;
 
     /**
      * 构造函数
@@ -58,8 +68,61 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<BaseRe
         this.mListData = listData;
     }
 
+    /**
+     * 设置Item的click监听事件
+     * @param itemClickListener
+     */
     public void setItemClickListener(BaseRecyclerAdapter.OnItemClickListener itemClickListener){
         this.mItemClickListener = itemClickListener;
+    }
+
+    /**
+     * 设置Item的子View的click监听事件
+     * @param itemChildClickListener
+     */
+    public void setItemChildClickListener(BaseRecyclerAdapter.OnItemChildClickListener itemChildClickListener){
+        this.mItemChildClickListener = itemChildClickListener;
+    }
+
+    /**
+     * 设置Item的子View的longClick监听事件
+     * @param itemChildLongClickListener
+     */
+    public void setItemChildLongClickListener(BaseRecyclerAdapter.OnItemChildLongClickListener itemChildLongClickListener){
+        this.mItemChildLongClickListener = itemChildLongClickListener;
+    }
+
+
+    /**
+     * 设置Item的子View的touchClick监听事件
+     * @param itemChildTouchClickListener
+     */
+    public void setItemChildTouchClickListener(BaseRecyclerAdapter.OnItemChildTouchClickListener itemChildTouchClickListener){
+        this.mItemChildTouchClickListener = itemChildTouchClickListener;
+    }
+
+    /**
+     * 获得Item的子View的click监听事件
+     * @return
+     */
+    public OnItemChildClickListener getItemChildClickListener() {
+        return mItemChildClickListener;
+    }
+
+    /**
+     * 获得Item的子View的longClick监听事件
+     * @return
+     */
+    public OnItemChildLongClickListener getItemChildLongClickListener() {
+        return mItemChildLongClickListener;
+    }
+
+    /**
+     * 获得Item的子View的touchClick监听事件
+     * @return
+     */
+    public OnItemChildTouchClickListener getItemChildTouchClickListener() {
+        return mItemChildTouchClickListener;
     }
 
     /**
@@ -72,7 +135,7 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<BaseRe
     @Override
     public BaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = mLayoutInflater.inflate(getLayoutID(), parent, false);
-        BaseViewHolder viewHolder = new BaseViewHolder(view);
+        BaseViewHolder viewHolder = new BaseViewHolder(this, view);
         return viewHolder;
     }
 
@@ -143,8 +206,11 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<BaseRe
         // SparseArray用于存储View，作为一种缓存
         private SparseArray<View> mViews;
 
-        BaseViewHolder(View itemView) {
+        private BaseRecyclerAdapter mAdapter;
+
+        BaseViewHolder(BaseRecyclerAdapter adapter, View itemView) {
             super(itemView);
+            this.mAdapter = adapter;
             if (mViews == null){
                 mViews = new SparseArray<>();
             }
@@ -160,11 +226,110 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<BaseRe
                 @Override
                 public void onClick(View v) {
                     if (listener != null){
-                        listener.onItemClick(itemView, position);
+                        listener.onItemClick(mAdapter, itemView, position);
                     }
                 }
             });
         }
+
+///////////////////////////////////////////////子View的点击事件////////////////////////////////////////////////////////
+
+        /**
+         * 添加子View的click事件
+         * @param id
+         * @param position
+         */
+        void addOnClickListener(int id, int position){
+            View view = getItemView(id);
+            addOnClickListener(view, position);
+        }
+
+        /**
+         * 添加子View的click事件
+         * @param view
+         * @param position
+         */
+        void addOnClickListener(final View view, final int position){
+            if (view != null){
+                if (!view.isClickable()){
+                    view.setClickable(true);
+                }
+                view.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        OnItemChildClickListener childClickListener = mAdapter.getItemChildClickListener();
+                        if (childClickListener != null){
+                            childClickListener.onItemChildClick(mAdapter, view, position);
+                        }
+                    }
+                });
+            }
+        }
+
+        /**
+         * 添加子View的longClick事件
+         * @param id
+         * @param position
+         */
+        void addOnLongClickListener(int id, int position){
+            View view = getItemView(id);
+            addOnLongClickListener(view, position);
+        }
+
+        /**
+         * 添加子View的longClick事件
+         * @param view
+         * @param position
+         */
+        void addOnLongClickListener(final View view, final int position){
+            if (view != null){
+                if (!view.isLongClickable()){
+                    view.setLongClickable(true);
+                }
+                view.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+                        OnItemChildLongClickListener childLongClickListener = mAdapter.getItemChildLongClickListener();
+                        if (childLongClickListener != null){
+                            return  childLongClickListener.onItemChildLongClick(mAdapter, view, position);
+                        }
+                        return false;
+                    }
+                });
+            }
+        }
+
+        /**
+         * 添加子View的touchClick事件
+         * @param id
+         * @param position
+         */
+        void addOnTouchClickListener(int id, int position){
+            View view = getItemView(id);
+            addOnTouchClickListener(view, position);
+        }
+
+        /**
+         * 添加子View的touchClick事件
+         * @param view
+         * @param position
+         */
+        void addOnTouchClickListener(final View view, final int position){
+            if (view != null){
+                view.setOnTouchListener(new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        OnItemChildTouchClickListener childTouchClickListener = mAdapter.getItemChildTouchClickListener();
+                        if (childTouchClickListener != null){
+                            return childTouchClickListener.onItemChildTouchClick(mAdapter, view, position);
+                        }
+                        return false;
+                    }
+                });
+            }
+        }
+
+///////////////////////////////////////////////子View的点击事件////////////////////////////////////////////////////////
 
         /**
          * 自认为最重要的代码
@@ -197,10 +362,56 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<BaseRe
         }
     }
 
+////////////////////////////////////////////监听接口////////////////////////////////////////////////////////////
     /**
-     * 整个ItemView的回调接口
+     * 整个ItemView的监听接口
      */
-    public interface OnItemClickListener{
-        void onItemClick(View itemView, int position);
+    public interface OnItemClickListener<T extends BaseRecyclerAdapter>{
+        /**
+         *
+         * @param adapter
+         * @param itemView
+         * @param position
+         */
+        void onItemClick(T adapter, View itemView, int position);
+    }
+
+    /**
+     * 每个Item子View的click监听接口
+     */
+    public interface OnItemChildClickListener<T extends BaseRecyclerAdapter> {
+        /**
+         *
+         * @param adapter
+         * @param view
+         * @param position
+         */
+        void onItemChildClick(T adapter, View view, int position);
+    }
+
+    /**
+     * 每个Item子View的longClick监听接口
+     */
+    public interface OnItemChildLongClickListener<T extends BaseRecyclerAdapter> {
+        /**
+         *
+         * @param adapter
+         * @param view
+         * @param position
+         */
+        boolean onItemChildLongClick(T adapter, View view, int position);
+    }
+
+    /**
+     * 每个Item子View的touchClick监听接口
+     */
+    public interface OnItemChildTouchClickListener<T extends BaseRecyclerAdapter> {
+        /**
+         *
+         * @param adapter
+         * @param view
+         * @param position
+         */
+        boolean onItemChildTouchClick(T adapter, View view, int position);
     }
 }

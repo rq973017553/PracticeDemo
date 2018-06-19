@@ -8,11 +8,13 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.rq.practice.R;
 import com.rq.practice.activities.base.BaseActivity;
 import com.rq.practice.activities.practice.CustomScrollActivity;
 import com.rq.practice.activities.practice.FragmentTabHostPractice;
+import com.rq.practice.adapter.BaseRecyclerAdapter;
 import com.rq.practice.adapter.MainAdapter;
 import com.rq.practice.bean.PracticeBean;
 import com.rq.practice.utils.EasyLog;
@@ -46,6 +48,7 @@ public class MainActivity extends BaseActivity {
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setAdapter(mMainAdapter);
         mMainAdapter.setItemClickListener(itemClickListener);
+        mMainAdapter.setItemChildClickListener(itemChildClickListener);
     }
 
     @Override
@@ -65,27 +68,21 @@ public class MainActivity extends BaseActivity {
         return practiceBean;
     }
 
-    MainAdapter.OnItemClickListener itemClickListener = new MainAdapter.OnItemClickListener(){
+    // Item的监听回调
+    MainAdapter.OnItemClickListener<MainAdapter> itemClickListener = new BaseRecyclerAdapter.OnItemClickListener<MainAdapter>() {
         @Override
-        public void onItemClick(View itemView, final int position) {
-            EasyLog.v("onItemClick!::"+position);
-            TextView textView = itemView.findViewById(R.id.main_item_btn);
-            textView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    PracticeBean practiceBean = mMainAdapter.getItemData(position);
-                    Class clazz = practiceBean.getClazz();
-                    startActivity(clazz);
-                }
-            });
-//            mMainAdapter.setOnClickListener(R.id.main_item_btn, new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    PracticeBean practiceBean = mMainAdapter.getItemData(position);
-//                    Class clazz = practiceBean.getClazz();
-//                    startActivity(clazz);
-//                }
-//            });
+        public void onItemClick(MainAdapter adapter, View itemView, int position) {
+            Toast.makeText(MainActivity.this, "itemView命中!", Toast.LENGTH_SHORT).show();
+        }
+    };
+
+    // Item的子View的监听回调
+    MainAdapter.OnItemChildClickListener<MainAdapter> itemChildClickListener = new MainAdapter.OnItemChildClickListener<MainAdapter>(){
+        @Override
+        public void onItemChildClick(MainAdapter adapter, View view, int position) {
+            PracticeBean practiceBean = adapter.getItemData(position);
+            Class<? extends Activity> clazz = practiceBean.getClazz();
+            startActivity(clazz);
         }
     };
 
