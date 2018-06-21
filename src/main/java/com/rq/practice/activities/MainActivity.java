@@ -4,17 +4,12 @@ import android.app.Activity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.ExpandableListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.rq.practice.R;
 import com.rq.practice.activities.base.BaseActivity;
 import com.rq.practice.activities.practice.CustomScrollActivity;
 import com.rq.practice.activities.practice.FragmentTabHostPractice;
-import com.rq.practice.adapter.BaseRecyclerAdapter;
 import com.rq.practice.adapter.MainAdapter;
 import com.rq.practice.bean.PracticeBean;
 import com.rq.practice.utils.EasyLog;
@@ -69,7 +64,7 @@ public class MainActivity extends BaseActivity {
     }
 
     // Item的监听回调
-    MainAdapter.OnItemClickListener<MainAdapter> itemClickListener = new BaseRecyclerAdapter.OnItemClickListener<MainAdapter>() {
+    MainAdapter.OnItemClickListener<MainAdapter> itemClickListener = new MainAdapter.OnItemClickListener<MainAdapter>() {
         @Override
         public void onItemClick(MainAdapter adapter, View itemView, int position) {
             Toast.makeText(MainActivity.this, "itemView命中!", Toast.LENGTH_SHORT).show();
