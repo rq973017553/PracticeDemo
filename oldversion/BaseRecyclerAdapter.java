@@ -19,7 +19,7 @@ import java.util.List;
  * 只需要复写两个abstract方法即可
  * Created by Rock you
  */
-public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<BaseRecyclerAdapter.RecyclerViewHolder> implements IAdapter{
+public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<BaseRecyclerAdapter.RecyclerViewHolder>{
 
     private Context mContext;
 
@@ -79,7 +79,6 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<BaseRe
      * 设置Item的子View的click监听事件
      * @param itemChildClickListener
      */
-    @Override
     public void setItemChildClickListener(IAdapterChildClickListener.OnItemChildClickListener itemChildClickListener){
         this.mItemChildClickListener = itemChildClickListener;
     }
@@ -88,7 +87,6 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<BaseRe
      * 设置Item的子View的longClick监听事件
      * @param itemChildLongClickListener
      */
-    @Override
     public void setItemChildLongClickListener(IAdapterChildClickListener.OnItemChildLongClickListener itemChildLongClickListener){
         this.mItemChildLongClickListener = itemChildLongClickListener;
     }
@@ -98,7 +96,6 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<BaseRe
      * 设置Item的子View的touchClick监听事件
      * @param itemChildTouchClickListener
      */
-    @Override
     public void setItemChildTouchClickListener(IAdapterChildClickListener.OnItemChildTouchClickListener itemChildTouchClickListener){
         this.mItemChildTouchClickListener = itemChildTouchClickListener;
     }
@@ -107,7 +104,6 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<BaseRe
      * 获得Item的子View的click监听事件
      * @return
      */
-    @Override
     public IAdapterChildClickListener.OnItemChildClickListener getItemChildClickListener() {
         return mItemChildClickListener;
     }
@@ -116,7 +112,6 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<BaseRe
      * 获得Item的子View的longClick监听事件
      * @return
      */
-    @Override
     public IAdapterChildClickListener.OnItemChildLongClickListener getItemChildLongClickListener() {
         return mItemChildLongClickListener;
     }
@@ -125,7 +120,6 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<BaseRe
      * 获得Item的子View的touchClick监听事件
      * @return
      */
-    @Override
     public IAdapterChildClickListener.OnItemChildTouchClickListener getItemChildTouchClickListener() {
         return mItemChildTouchClickListener;
     }
@@ -206,16 +200,19 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<BaseRe
      * 在bindHolder中调用BaseViewHolder的
      * getItemView和getImageView，getTextView，getEditText
      */
-    public static final class RecyclerViewHolder extends RecyclerView.ViewHolder implements IAdapter.IViewHolder{
+    public static final class RecyclerViewHolder extends RecyclerView.ViewHolder {
+
+        // SparseArray用于存储View，作为一种缓存
+        private SparseArray<View> mViews;
 
         private BaseRecyclerAdapter mAdapter;
-
-        private ViewHolderHelper<BaseRecyclerAdapter> mViewHolderHelper;
 
         RecyclerViewHolder(BaseRecyclerAdapter adapter, View itemView) {
             super(itemView);
             this.mAdapter = adapter;
-            mViewHolderHelper = new ViewHolderHelper<>(adapter, itemView);
+            if (mViews == null){
+                mViews = new SparseArray<>();
+            }
         }
 
         /**
@@ -242,9 +239,9 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<BaseRe
          * @param id
          * @param position
          */
-        @Override
         public void addOnClickListener(int id, int position){
-            mViewHolderHelper.addOnClickListener(id, position);
+            View view = getItemView(id);
+            addOnClickListener(view, position);
         }
 
         /**
@@ -252,9 +249,22 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<BaseRe
          * @param view
          * @param position
          */
-        @Override
         public void addOnClickListener(final View view, final int position){
-            mViewHolderHelper.addOnClickListener(view, position);
+            if (view != null){
+                if (!view.isClickable()){
+                    view.setClickable(true);
+                }
+                view.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        IAdapterChildClickListener.OnItemChildClickListener childClickListener =
+                                mAdapter.getItemChildClickListener();
+                        if (childClickListener != null){
+                            childClickListener.onItemChildClick(mAdapter, view, position);
+                        }
+                    }
+                });
+            }
         }
 
         /**
@@ -262,9 +272,9 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<BaseRe
          * @param id
          * @param position
          */
-        @Override
         public void addOnLongClickListener(int id, int position){
-            mViewHolderHelper.addOnLongClickListener(id, position);
+            View view = getItemView(id);
+            addOnLongClickListener(view, position);
         }
 
         /**
@@ -272,9 +282,23 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<BaseRe
          * @param view
          * @param position
          */
-        @Override
         public void addOnLongClickListener(final View view, final int position){
-            mViewHolderHelper.addOnLongClickListener(view, position);
+            if (view != null){
+                if (!view.isLongClickable()){
+                    view.setLongClickable(true);
+                }
+                view.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+                        IAdapterChildClickListener.OnItemChildLongClickListener childLongClickListener =
+                                mAdapter.getItemChildLongClickListener();
+                        if (childLongClickListener != null){
+                            return  childLongClickListener.onItemChildLongClick(mAdapter, view, position);
+                        }
+                        return false;
+                    }
+                });
+            }
         }
 
         /**
@@ -282,9 +306,9 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<BaseRe
          * @param id
          * @param position
          */
-        @Override
         public void addOnTouchClickListener(int id, int position){
-            mViewHolderHelper.addOnTouchClickListener(id, position);
+            View view = getItemView(id);
+            addOnTouchClickListener(view, position);
         }
 
         /**
@@ -292,9 +316,20 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<BaseRe
          * @param view
          * @param position
          */
-        @Override
         public void addOnTouchClickListener(final View view, final int position){
-            mViewHolderHelper.addOnTouchClickListener(view, position);
+            if (view != null){
+                view.setOnTouchListener(new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        IAdapterChildClickListener.OnItemChildTouchClickListener childTouchClickListener =
+                                mAdapter.getItemChildTouchClickListener();
+                        if (childTouchClickListener != null){
+                            return childTouchClickListener.onItemChildTouchClick(mAdapter, view, position);
+                        }
+                        return false;
+                    }
+                });
+            }
         }
 
 ///////////////////////////////////////////////子View的点击事件////////////////////////////////////////////////////////
@@ -307,10 +342,14 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<BaseRe
          * @param <T>
          * @return
          */
-        @Override
         @SuppressWarnings("unchecked")
         public <T extends View> T getItemView(int id){
-            return mViewHolderHelper.getItemView(id);
+            View view = mViews.get(id);
+            if (view == null){
+                view = itemView.findViewById(id);
+                mViews.put(id, view);
+            }
+            return (T)view;
         }
 
         public ImageView getImageView(int id){

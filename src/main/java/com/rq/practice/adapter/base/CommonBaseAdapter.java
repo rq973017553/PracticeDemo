@@ -18,7 +18,7 @@ import java.util.List;
  * @see [相关类/方法]
  * @since [产品/模块版本]
  */
-public abstract class CommonBaseAdapter<T> extends BaseAdapter {
+public abstract class CommonBaseAdapter<T> extends BaseAdapter implements IAdapter{
 
     private List<T> mListData;
 
@@ -34,6 +34,36 @@ public abstract class CommonBaseAdapter<T> extends BaseAdapter {
         this.mContext = context;
         this.mListData = listData;
         this.mLayoutInflater = LayoutInflater.from(context);
+    }
+
+    @Override
+    public void setItemChildClickListener(IAdapterChildClickListener.OnItemChildClickListener itemChildClickListener) {
+
+    }
+
+    @Override
+    public void setItemChildLongClickListener(IAdapterChildClickListener.OnItemChildLongClickListener itemChildLongClickListener) {
+
+    }
+
+    @Override
+    public void setItemChildTouchClickListener(IAdapterChildClickListener.OnItemChildTouchClickListener itemChildTouchClickListener) {
+
+    }
+
+    @Override
+    public IAdapterChildClickListener.OnItemChildClickListener getItemChildClickListener() {
+        return null;
+    }
+
+    @Override
+    public IAdapterChildClickListener.OnItemChildLongClickListener getItemChildLongClickListener() {
+        return null;
+    }
+
+    @Override
+    public IAdapterChildClickListener.OnItemChildTouchClickListener getItemChildTouchClickListener() {
+        return null;
     }
 
     @Override
@@ -61,7 +91,7 @@ public abstract class CommonBaseAdapter<T> extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder;
         if (convertView == null){
-            viewHolder = new ViewHolder(this);
+            viewHolder = new ViewHolder(this, convertView);
             convertView = mLayoutInflater.inflate(getLayoutID(), parent, false);
             createViewHolder(viewHolder);
             convertView.setTag(viewHolder);
@@ -81,9 +111,47 @@ public abstract class CommonBaseAdapter<T> extends BaseAdapter {
     protected abstract void bindHolder(ViewHolder holder, int position);
 
 
-    public static final class ViewHolder{
-        ViewHolder(CommonBaseAdapter adapter){
+    public static final class ViewHolder implements IAdapter.IViewHolder{
 
+        ViewHolderHelper<CommonBaseAdapter> mViewHolderHelper;
+
+        ViewHolder(CommonBaseAdapter adapter, View itemView){
+            mViewHolderHelper = new ViewHolderHelper<>(adapter, itemView);
+        }
+
+        @Override
+        public <T extends View> T getItemView(int id) {
+            return mViewHolderHelper.getItemView(id);
+        }
+
+        @Override
+        public void addOnClickListener(int id, int position) {
+            mViewHolderHelper.addOnClickListener(id, position);
+        }
+
+        @Override
+        public void addOnClickListener(View view, int position) {
+            mViewHolderHelper.addOnClickListener(view, position);
+        }
+
+        @Override
+        public void addOnLongClickListener(int id, int position) {
+            mViewHolderHelper.addOnLongClickListener(id, position);
+        }
+
+        @Override
+        public void addOnLongClickListener(View view, int position) {
+            mViewHolderHelper.addOnLongClickListener(view, position);
+        }
+
+        @Override
+        public void addOnTouchClickListener(int id, int position) {
+            mViewHolderHelper.addOnTouchClickListener(id, position);
+        }
+
+        @Override
+        public void addOnTouchClickListener(View view, int position) {
+            mViewHolderHelper.addOnTouchClickListener(view, position);
         }
     }
 }

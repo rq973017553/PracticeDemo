@@ -11,6 +11,7 @@ import com.rq.practice.activities.base.BaseActivity;
 import com.rq.practice.activities.practice.CustomScrollActivity;
 import com.rq.practice.activities.practice.FragmentTabHostPractice;
 import com.rq.practice.adapter.MainAdapter;
+import com.rq.practice.adapter.base.IAdapterChildClickListener;
 import com.rq.practice.bean.PracticeBean;
 import com.rq.practice.utils.EasyLog;
 
@@ -72,7 +73,9 @@ public class MainActivity extends BaseActivity {
     };
 
     // Item的子View的监听回调
-    MainAdapter.OnItemChildClickListener<MainAdapter> itemChildClickListener = new MainAdapter.OnItemChildClickListener<MainAdapter>(){
+    IAdapterChildClickListener.OnItemChildClickListener<MainAdapter> itemChildClickListener =
+            new IAdapterChildClickListener.OnItemChildClickListener<MainAdapter>(){
+
         @Override
         public void onItemChildClick(MainAdapter adapter, View view, int position) {
             PracticeBean practiceBean = adapter.getItemData(position);
