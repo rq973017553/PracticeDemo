@@ -24,7 +24,16 @@ public abstract class CommonBaseAdapter<T> extends BaseAdapter implements IAdapt
 
     private Context mContext;
 
-    protected LayoutInflater mLayoutInflater;
+    private LayoutInflater mLayoutInflater;
+
+    // ItemChildClickListener
+    private IAdapterChildClickListener.OnItemChildClickListener mItemChildClickListener;
+
+    // ItemChildLongClickListener
+    private IAdapterChildClickListener.OnItemChildLongClickListener mItemChildLongClickListener;
+
+    // ItemChildTouchClickListener
+    private IAdapterChildClickListener.OnItemChildTouchClickListener mItemChildTouchClickListener;
 
     public CommonBaseAdapter(Context context){
         this(context, Collections.<T>emptyList());
@@ -38,32 +47,32 @@ public abstract class CommonBaseAdapter<T> extends BaseAdapter implements IAdapt
 
     @Override
     public void setItemChildClickListener(IAdapterChildClickListener.OnItemChildClickListener itemChildClickListener) {
-
+        this.mItemChildClickListener = itemChildClickListener;
     }
 
     @Override
     public void setItemChildLongClickListener(IAdapterChildClickListener.OnItemChildLongClickListener itemChildLongClickListener) {
-
+        this.mItemChildLongClickListener = itemChildLongClickListener;
     }
 
     @Override
     public void setItemChildTouchClickListener(IAdapterChildClickListener.OnItemChildTouchClickListener itemChildTouchClickListener) {
-
+        this.mItemChildTouchClickListener = itemChildTouchClickListener;
     }
 
     @Override
     public IAdapterChildClickListener.OnItemChildClickListener getItemChildClickListener() {
-        return null;
+        return mItemChildClickListener;
     }
 
     @Override
     public IAdapterChildClickListener.OnItemChildLongClickListener getItemChildLongClickListener() {
-        return null;
+        return mItemChildLongClickListener;
     }
 
     @Override
     public IAdapterChildClickListener.OnItemChildTouchClickListener getItemChildTouchClickListener() {
-        return null;
+        return mItemChildTouchClickListener;
     }
 
     @Override
