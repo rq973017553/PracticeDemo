@@ -3,10 +3,10 @@
     <!-- Base application theme. -->
     <style name="AppTheme.Base" parent="Theme.AppCompat.Light.NoActionBar">
          <!--Customize your theme here. -->
+        <item name="android:background">@android:color/transparent</item>
     </style>
 
     <style name="AppThem" parent="AppTheme.Base">
-        <item name="android:background">@android:color/transparent</item>
     </style>
     
     <style name="app_common_bg">

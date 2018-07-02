@@ -68,8 +68,9 @@ public abstract class BaseActivity extends AppCompatActivity {
         mToolBar.setTitle("");
         if (mToolBar != null){
             setSupportActionBar(mToolBar);
-            Window window = getWindow();
-            SystemBarUtils.setStatusBarFullTransparent(window);
+//            SystemBarUtils.setAndroidNativeLightStatusBar(mToolBar, false);
+            SystemBarUtils.setStatusBarFullTransparent(getWindow(), false);
+//            SystemBarUtils.setHalfTransparent(getWindow());
         }
     }
 
