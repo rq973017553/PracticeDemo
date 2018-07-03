@@ -10,21 +10,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.rq.practice.R;
-import com.rq.practice.activities.MainActivity;
 import com.rq.practice.activities.base.BaseActivity;
 import com.rq.practice.fragments.test.Fragment00;
 import com.rq.practice.fragments.test.Fragment01;
 import com.rq.practice.fragments.test.Fragment02;
 import com.rq.practice.fragments.test.Fragment03;
 import com.rq.practice.fragments.test.Fragment04;
-import com.rq.practice.utils.EasyLog;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 
 /**
  *  FragmentTabHost练习类

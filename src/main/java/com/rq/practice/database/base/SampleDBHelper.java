@@ -19,12 +19,17 @@ public class SampleDBHelper extends DBHelper {
     }
 
     @Override
-    protected void onUpgrade() {
-        // Empty Method
+    protected void onUpgrade(int version) {
+        //Empty
     }
 
     @Override
     protected void onDropTable() {
-        // Empty Method
+        //Empty
+    }
+
+    @Override
+    protected String getTableName() {
+        return null;
     }
 }

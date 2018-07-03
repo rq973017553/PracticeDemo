@@ -15,6 +15,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.UUID;
 
@@ -59,6 +60,19 @@ public class HttpUtils {
             }
         }
         return null;
+    }
+
+    /**
+     * POST请求
+     * 由于限制POST的map参数为"LinkedHashMap"
+     * 可以保证输入的key-value有序
+     * @param url 请求访问的地址
+     * @param map key和value的LinkedHashMap
+     * @param <T> value的数据类型
+     * @return {@link Response}
+     */
+    public static <T> Response post(String url, LinkedHashMap<String, T> map){
+        return post(url, map);
     }
 
     /**

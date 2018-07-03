@@ -7,7 +7,7 @@ import android.view.View;
 /**
  * ViewHolder的帮助类
  * 用于添加各种Listener事件
- * @author rock tou
+ * @author rock you
  * @version 1.0.0
  */
 public class ViewHolderHelper<T extends IAdapter> implements IAdapter.IViewHolder{

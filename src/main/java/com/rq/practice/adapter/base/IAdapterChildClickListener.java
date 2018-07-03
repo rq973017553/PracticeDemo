@@ -3,7 +3,7 @@ package com.rq.practice.adapter.base;
 import android.view.View;
 
 /**
- * 通用的Child监听接口集合
+ * 通用的ChildView监听接口集合
  * @author rock you
  * @version 1.0.0
  */

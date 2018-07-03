@@ -2,7 +2,6 @@ package com.rq.practice.adapter;
 
 import android.content.Context;
 import android.text.TextUtils;
-import android.view.View;
 import android.widget.Button;
 
 import com.rq.practice.R;

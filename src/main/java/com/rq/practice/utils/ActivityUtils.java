@@ -8,8 +8,8 @@ import java.util.List;
 
 /**
  * Activity管理工具
- * 想法是可以统一释放所有activity
- * 还可以在每个生命周期中调用一些方法统计方法
+ * 可以统一释放所有activity
+ * 还可以在每个生命周期中调用一些统计方法
  *
  * @author rock you
  * @version [1.0.0 2018.6.5]
