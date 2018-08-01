@@ -10,6 +10,7 @@ import com.rq.practice.R;
 import com.rq.practice.activities.base.BaseActivity;
 import com.rq.practice.activities.practice.CustomScrollActivity;
 import com.rq.practice.activities.practice.FragmentTabHostPractice;
+import com.rq.practice.activities.practice.RxJavaPracticeActivity;
 import com.rq.practice.adapter.MainAdapter;
 import com.rq.practice.adapter.base.IAdapterChildClickListener;
 import com.rq.practice.bean.PracticeBean;
@@ -36,7 +37,7 @@ public class MainActivity extends BaseActivity {
     }
 
     @Override
-    public void initView() {
+    public void bindView() {
         mMainAdapter = new MainAdapter(MainActivity.this);
         LinearLayoutManager layoutManager = new LinearLayoutManager(MainActivity.this);
         layoutManager.setOrientation(RecyclerView.VERTICAL);
@@ -52,6 +53,7 @@ public class MainActivity extends BaseActivity {
         List<PracticeBean> listData = new ArrayList<>();
         listData.add(createPracticeBean(FragmentTabHostPractice.class));
         listData.add(createPracticeBean(CustomScrollActivity.class));
+        listData.add(createPracticeBean(RxJavaPracticeActivity.class));
         mMainAdapter.setListData(listData);
     }
 

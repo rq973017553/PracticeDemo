@@ -22,7 +22,7 @@ public class CustomScrollActivity extends BaseActivity{
     }
 
     @Override
-    public void initView() {
+    public void bindView() {
         mCustomView = findViewById(R.id.custom_horizontal_scrollView);
     }
 

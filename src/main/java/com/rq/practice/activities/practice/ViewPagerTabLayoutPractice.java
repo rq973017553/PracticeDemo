@@ -19,7 +19,7 @@ public class ViewPagerTabLayoutPractice extends BaseActivity {
     }
 
     @Override
-    public void initView() {
+    public void bindView() {
 
     }
 

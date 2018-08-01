@@ -50,7 +50,7 @@ public class FragmentTabHostPractice extends BaseActivity {
     }
 
     @Override
-    public void initView() {
+    public void bindView() {
         mTabHost = findViewById(android.R.id.tabhost);
         mTabHost.setup(this, getSupportFragmentManager(), R.id.tab_content);
         for (int i = 0; i < SIZE; i ++){

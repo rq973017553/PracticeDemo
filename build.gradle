@@ -33,8 +33,14 @@ dependencies {
     implementation 'com.android.support:design:27.1.1'
 
     // ConstraintLayout所需要的jar包
-    implementation 'com.android.support.constraint:constraint-layout:1.1.1'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.2'
 
     // support-v4jar包
     implementation 'com.android.support:support-v4:27.1.1'
+
+    // RxJava2
+    implementation 'io.reactivex.rxjava2:rxjava:2.1.16'
+
+    // RxJava的android适配
+    implementation 'io.reactivex.rxjava2:rxandroid:2.0.2'
 }

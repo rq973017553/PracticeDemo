@@ -39,7 +39,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         setContentView(R.layout.root_layout);
         initTemplateLayout();
         ActivityUtils.onActivityCreate(this);
-        initView();
+        bindView();
         initData();
     }
 
@@ -109,7 +109,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     public abstract int getLayoutID();
 
-    public abstract void initView();
+    public abstract void bindView();
 
     public abstract void initData();
 }

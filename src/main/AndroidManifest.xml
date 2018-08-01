@@ -24,6 +24,9 @@
 
         <!--自定义View练习-->
         <activity android:name=".activities.practice.CustomScrollActivity"/>
+
+        <!--RxJava2练习-->
+        <activity android:name=".activities.practice.RxJavaPracticeActivity"/>
     </application>
 
 </manifest>

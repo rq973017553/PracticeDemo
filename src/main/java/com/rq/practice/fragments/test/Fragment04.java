@@ -17,7 +17,7 @@ public class Fragment04 extends BaseFragment {
     }
 
     @Override
-    public void initView() {
+    public void bindView() {
 
     }
 

@@ -27,7 +27,7 @@ public abstract class BaseFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         if (mView == null){
             mView = inflater.inflate(getLayoutID(), container, false);
-            initView();
+            bindView();
             initData();
         }
 
@@ -55,7 +55,7 @@ public abstract class BaseFragment extends Fragment {
 
     public abstract int getLayoutID();
 
-    public abstract void initView();
+    public abstract void bindView();
 
     public abstract void initData();
 
