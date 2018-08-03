@@ -16,6 +16,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
+        android:textAllCaps="false"
         android:id="@+id/start_rx_java_btn"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
