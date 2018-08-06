@@ -63,6 +63,7 @@ public abstract class BaseFragment extends Fragment {
         return mView;
     }
 
+    @SuppressWarnings("unchecked")
     public <T extends View> T findViewById(int id){
         T t = getCurrentView().findViewById(id);
         if (t == null){
