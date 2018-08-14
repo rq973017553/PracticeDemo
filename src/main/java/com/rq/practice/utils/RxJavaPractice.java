@@ -2,6 +2,10 @@ package com.rq.practice.utils;
 
 
 import android.text.TextUtils;
+import android.util.Log;
+
+import org.reactivestreams.Subscriber;
+import org.reactivestreams.Subscription;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -9,7 +13,12 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
+import io.reactivex.BackpressureStrategy;
+import io.reactivex.Flowable;
+import io.reactivex.FlowableEmitter;
+import io.reactivex.FlowableOnSubscribe;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
@@ -33,6 +42,8 @@ public class RxJavaPractice {
 
     private static final int MAX_VALUE = 5;
 
+    private Subscription mSubscription;
+
     private RxJavaPractice(){}
 
     private static class Holder{
@@ -43,6 +54,68 @@ public class RxJavaPractice {
         return Holder.INSTANCE;
     }
 
+
+    /**
+     * flowable操作符
+     * 同时提供了
+     * </br>
+     * BackpressureStrategy.DROP
+     * </br>
+     * BackpresureStratgy.LATEST
+     * </br>
+     * BackpresureStratgy.ERROR
+     * </br>
+     * BackpresureStratgy.BUFFER
+     * </br>
+     * BackpresureStratgy.MISSING
+     * </br>
+     * 背压策略
+     * </br>
+     * Subscriber接口的onSubscribe方法的Subscription对象提供request。
+     * 通过该方法设置的request次数，控制FlowableEmitter对象的requested方法的request次数
+     *
+     * @param listener 接口
+     */
+    public void flowablePractice(final PracticeListener listener){
+        Flowable.create(new FlowableOnSubscribe<String>() {
+            @Override
+            public void subscribe(FlowableEmitter<String> emitter) throws Exception {
+                long request = emitter.requested();
+                for (int i=0; i < request; i++){
+                    emitter.onNext(String.valueOf(i));
+                    Thread.sleep(1000);
+                }
+                emitter.onComplete();
+            }
+        }, BackpressureStrategy.LATEST)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<String>() {
+                    @Override
+                    public void onSubscribe(Subscription s) {
+                        s.request(10);
+                    }
+
+                    @Override
+                    public void onNext(String s) {
+                        if (listener != null){
+                            listener.showRxJavaData(s);
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable t) {
+                        if (listener != null){
+                            listener.showRxJavaDataError(t);
+                        }
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
 
     /**
      * map操作符练习
@@ -277,5 +350,7 @@ public class RxJavaPractice {
     public interface PracticeListener{
 
         void showRxJavaData(String data);
+
+        void showRxJavaDataError(Throwable e);
     }
 }

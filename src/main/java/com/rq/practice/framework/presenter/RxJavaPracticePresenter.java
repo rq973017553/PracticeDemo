@@ -1,6 +1,7 @@
 package com.rq.practice.framework.presenter;
 
 import com.rq.practice.framework.contract.RxJavaPracticeContract;
+import com.rq.practice.utils.EasyLog;
 import com.rq.practice.utils.RxJavaPractice;
 
 /**
@@ -13,10 +14,15 @@ public class RxJavaPracticePresenter extends CommonPresenter<RxJavaPracticeContr
 
     @Override
     public void startRxJavaPractice() {
-        RxJavaPractice.getInstance().zipPractice(new RxJavaPractice.PracticeListener() {
+        RxJavaPractice.getInstance().flowablePractice(new RxJavaPractice.PracticeListener() {
             @Override
             public void showRxJavaData(String data) {
                 mView.showRxJavaResult(data);
+            }
+
+            @Override
+            public void showRxJavaDataError(Throwable e) {
+                EasyLog.v(e.getMessage());
             }
         });
     }
